@@ -13,6 +13,7 @@ require 'git/index'
 require 'git/working_directory'
 
 require 'git/log'
+require 'git/blame'
 require 'git/object'
 
 require 'git/branches'

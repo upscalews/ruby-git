@@ -92,6 +92,31 @@ module Git
       full_log = command_lines('log', arr_opts, true)
       process_commit_data(full_log)
     end
+
+    def blame(file, opts={})
+      arr_opts = %w( --incremental )
+      arr_opts << "-L#{opts[:start]},#{opts[:end]}" if opts[:start] && opts[:end]
+      arr_opts << '--reverse' if opts[:reverse]
+      case opts[:detect_intrafile_moves]
+        when true then arr_opts << '-M'
+        when Fixnum then arr_opts << "-M#{opts[:detect_intrafile_moves]}"
+      end
+      if opts[:detect_interfile_moves]
+        c_opt = if opts[:check_all_commits_for_interfile_moves]
+                  '-CCC'
+                elsif opts[:check_first_file_commit_for_interfile_moves]
+                  '-CC'
+                else
+                  '-C'
+                end
+        c_opt << opts[:detect_interfile_moves] if opts[:detect_interfile_moves].kind_of?(Fixnum)
+      end
+      arr_opts << '-w' if opts[:ignore_whitespace]
+      arr_opts << opts[:revision] if opts[:revision]
+      arr_opts << '--' << file
+
+      command_lines 'blame', arr_opts
+    end
     
     def revparse(string)
       return string if string =~ /[A-Fa-f0-9]{40}/  # passing in a sha - just no-op it

@@ -170,6 +170,12 @@ module Git
       Git::Log.new(self, count)
     end
 
+    # returns a Git::BlameResult object with the commits that most recently
+    # modified each line
+    def blame(file, opts={})
+      Git::Blame.new(self, file, opts).result
+    end
+
     # returns a Git::Status object
     def status
       Git::Status.new(self)
