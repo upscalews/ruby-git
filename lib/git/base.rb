@@ -150,7 +150,10 @@ module Git
     # on the objectish and determine the type of the object and return 
     # an appropriate object for that type 
     def object(objectish)
+      return nil unless objectish
       Git::Object.new(self, objectish)
+    rescue Git::GitExecuteError
+      return nil # unknown revision
     end
     
     def gtree(objectish)
