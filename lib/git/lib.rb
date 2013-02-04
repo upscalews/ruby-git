@@ -168,7 +168,7 @@ module Git
           data = line.split
           key = data.shift
           value = data.join(' ')
-          if key =~ /commit/
+          if key == 'commit'
             sha = value
             hsh_array << hsh if hsh
             hsh = {'sha' => sha, 'message' => '', 'parent' => []}
